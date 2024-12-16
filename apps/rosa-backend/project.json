@@ -1,7 +1,7 @@
 {
-  "name": "rosa",
+  "name": "rosa-backend",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/rosa/src",
+  "sourceRoot": "apps/rosa-backend/src",
   "projectType": "application",
   "tags": [],
   "targets": {
@@ -22,15 +22,15 @@
       "defaultConfiguration": "development",
       "dependsOn": ["build"],
       "options": {
-        "buildTarget": "rosa:build",
+        "buildTarget": "rosa-backend:build",
         "runBuildTargetDependencies": false
       },
       "configurations": {
         "development": {
-          "buildTarget": "rosa:build:development"
+          "buildTarget": "rosa-backend:build:development"
         },
         "production": {
-          "buildTarget": "rosa:build:production"
+          "buildTarget": "rosa-backend:build:production"
         }
       }
     }

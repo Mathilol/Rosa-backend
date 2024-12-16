@@ -1,17 +1,17 @@
 {
-  "name": "rosa-e2e",
+  "name": "rosa-backend-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "implicitDependencies": ["rosa"],
+  "implicitDependencies": ["rosa-backend"],
   "targets": {
     "e2e": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{e2eProjectRoot}"],
       "options": {
-        "jestConfig": "apps/rosa-e2e/jest.config.ts",
+        "jestConfig": "apps/rosa-backend-e2e/jest.config.ts",
         "passWithNoTests": true
       },
-      "dependsOn": ["rosa:build"]
+      "dependsOn": ["rosa-backend:build"]
     }
   }
 }

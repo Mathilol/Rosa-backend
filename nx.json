@@ -36,7 +36,7 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["apps/rosa-e2e/**/*"]
+      "exclude": ["apps/rosa-e2e/**/*", "apps/rosa-backend-e2e/**/*"]
     }
   ]
 }
