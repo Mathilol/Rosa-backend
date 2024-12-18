@@ -1,6 +1,6 @@
-import {Prop, SchemaFactory, Schema} from "@nestjs/mongoose";
+import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
 
-@Schema({ collection: 'appointment'})
+@Schema({ collection: 'appointment' })
 export class Appointment {
   @Prop() startDate: Date;
   @Prop() endDate: Date;

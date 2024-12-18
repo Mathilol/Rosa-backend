@@ -1,6 +1,6 @@
-import {Availability} from "../availability";
+import { Availability } from '../availability';
 
 export type AvailabilityDto = {
-  availabilities: Availability[]
+  availabilities: Availability[];
   date: Date;
-}
+};

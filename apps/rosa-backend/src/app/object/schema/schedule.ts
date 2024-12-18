@@ -1,5 +1,5 @@
-import {Prop, SchemaFactory, Schema} from "@nestjs/mongoose";
-import {Days} from "../days";
+import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
+import { Days } from '../days';
 
 @Schema({ collection: 'schedule' })
 export class Schedule {
@@ -7,7 +7,6 @@ export class Schedule {
   @Prop() startTime: String;
   @Prop() endTime: String;
   @Prop() healthProfessionalId: number;
-
 }
 
 export const ScheduleSchema = SchemaFactory.createForClass(Schedule);
