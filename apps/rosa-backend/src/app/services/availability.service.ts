@@ -1,22 +1,19 @@
 import {Injectable} from "@nestjs/common";
-import {Appointment} from "../object/schema/appointment";
 import {AppointmentRepository} from "../repository/appointment.repository";
 import {ScheduleRepository} from "../repository/schedule.repository";
 import {Schedule} from "../object/schema/schedule";
 import {AvailabilityDto} from "../object/dto/availability.dto";
 import {
-  format,
   addDays,
   isBefore,
-  parseISO,
   isAfter,
   differenceInMinutes,
   addMinutes,
   addYears,
-  compareAsc
 } from 'date-fns';
 import {Days} from "../object/days";
 import {Availability} from "../object/availability";
+import {Appointment} from "../object/schema/appointment";
 
 @Injectable()
 export class AvailabilityService {
@@ -26,11 +23,10 @@ export class AvailabilityService {
 
 
   public async getAvailabilities(from: Date, to: Date): Promise<AvailabilityDto[]> {
-    const schedules = await this.scheduleRepository.findAllForHP(1);
-    const appointments = await this.appointmentRepository.findAllForHP(1, from, to);
-    let availabilityDtos = this.calculateAvailabiliteesFromSchedules(from, to, schedules);
+    const schedules: Schedule[] = await this.scheduleRepository.findAllForHP(1);
+    const appointments: Appointment[] = await this.appointmentRepository.findAllForHP(1, from, to);
+    let availabilityDtos: AvailabilityDto[] = this.calculateAvailabilitiesFromSchedules(from, to, schedules);
 
-    console.log(appointments);
     appointments.forEach(app => {
       availabilityDtos.forEach(availabilityDto => {
         availabilityDto.availabilities = availabilityDto.availabilities.flatMap(availability => {
@@ -73,21 +69,20 @@ export class AvailabilityService {
       const availabilites: Availability[] = availabilitesDtos.flatMap(a => a.availabilities);
 
       if (availabilites.length > 0) {
-        return  availabilites.reduce((currentValue, newValue) => isBefore(newValue.startDate, currentValue.startDate) ? currentValue : newValue)
+        return availabilites.reduce((previousValue, newValue) => isAfter(newValue.startDate, previousValue.startDate) ? previousValue : newValue);
       }
     }
 
     return;
   }
 
-  private calculateAvailabiliteesFromSchedules(fromDate: Date, endDate: Date, schedules: Schedule[]): AvailabilityDto[] {
+  private calculateAvailabilitiesFromSchedules(fromDate: Date, endDate: Date, schedules: Schedule[]): AvailabilityDto[] {
     const availabilityDtos: AvailabilityDto[] = [];
 
     let currentDate = fromDate;
     while (isBefore(currentDate, endDate) || currentDate.getTime() === endDate.getTime()) {
       const schedule = schedules.find(s => s.days.includes(Days[currentDate.getDay()]))
       if (schedule) {
-        console.log(new Date(`${currentDate.toISOString().slice(0, 10)}T${schedule.startTime}:00`))
         availabilityDtos.push({
           availabilities: [{
             startDate: new Date(`${currentDate.toISOString().slice(0, 10)}T${schedule.startTime}:00`),
@@ -108,8 +103,8 @@ export class AvailabilityService {
 
     for (let i = 0; i < numberOfChunks; i++) {
       const start = addMinutes(availability.startDate, i * chunkSize);
-      const end =  addMinutes(start, chunkSize);
-      availabilities.push({ startDate: start, endDate: end });
+      const end = addMinutes(start, chunkSize);
+      availabilities.push({startDate: start, endDate: end});
     }
 
     return availabilities;

@@ -1,8 +1,9 @@
-import {BadRequestException, Controller, Get, Query, UsePipes, ValidationPipe} from '@nestjs/common';
+import {BadRequestException, Controller, Get, NotFoundException, Query, UsePipes, ValidationPipe} from '@nestjs/common';
 import {AvailabilityService} from "../services/availability.service";
 import {DateRangeDto} from "../object/dto/dateRange.dto";
 import {isAfter} from "date-fns";
 import {validateOrReject} from "class-validator";
+import {Availability} from "../object/availability";
 
 @Controller('availabilities')
 export class AvailabilityController {
@@ -27,6 +28,12 @@ export class AvailabilityController {
   @Get('next-availability')
   async getNextAvailability(@Query('after') after: string) {
     const afterDate = new Date(after);
-    return this.availabilityService.getNextAvailability(afterDate);
+    const availability: Availability = await this.availabilityService.getNextAvailability(afterDate);
+
+    if (!availability) {
+      throw new NotFoundException("No availability found in the upcoming year.")
+    }
+
+    return availability;
   }
 }
